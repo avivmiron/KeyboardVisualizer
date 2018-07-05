@@ -66,6 +66,8 @@ enum
     VISUALIZER_PATTERN_ANIM_COLOR_WHEEL_2,
     VISUALIZER_PATTERN_ANIM_SPECTRUM_CYCLE,
     VISUALIZER_PATTERN_ANIM_SINUSOIDAL_CYCLE,
+	VISUALIZER_PATTERN_ANIM_WAVE,
+	VISUALIZER_PATTERN_ANIM_CYCLE,
 
     //Number of Patterns
     VISUALIZER_NUM_PATTERNS
@@ -93,7 +95,9 @@ const char * const visualizer_pattern_labels[VISUALIZER_NUM_PATTERNS] =
     "Color Wheel",
     "Color Wheel 2",
     "Spectrum Cycle",
-    "Sinusoidal Cycle"
+    "Sinusoidal Cycle",
+	"Wave",
+	"Cycle",
 };
 
 typedef unsigned int VISUALIZER_SINGLE_COLOR;

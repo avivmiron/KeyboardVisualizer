@@ -1282,6 +1282,38 @@ void DrawSingleColorStatic(float amplitude, COLORREF in_color, vis_pixels *out_p
     }
 }
 
+void DrawWave(int bright, float bkgd_step, vis_pixels *pixels)
+{
+	bright = (int)(bright * (255.0f / 100.0f));
+	for (int x = 0; x < 256; x++)
+	{
+		for (int y = 0; y < 64; y++)
+		{
+			int red = (int)(127 * (cos(((((int)((x * (360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f)) + 1));
+			int blu = (int)(127 * (sin(((((int)((x * (360 / 255.0f)) - bkgd_step) % 360) / 360.0f) * 2 * 3.14f)) + 1));
+			pixels->pixels[y][x] = RGB(((bright * red) / 256), 0, ((bright * blu) / 256));
+		}
+	}
+}
+
+void DrawCycle(int bright, float bkgd_step, int center_x, int center_y, vis_pixels *pixels)
+{
+	bright = (int)(bright * (255.0f / 100.0f));
+	for (int x = 0; x < 256; x++)
+	{
+		for (int y = 0; y < 64; y++)
+		{
+			float hue = (float)(bkgd_step + (int)(180 + atan2(y - center_y, x - center_x) * (180.0 / 3.14159)) % 360);
+			hsv_t hsv2 = { (int)hue, 255, (unsigned char)bright };
+			int out_color = hsv2rgb(&hsv2);
+			if (GetRValue(out_color) < 128 && GetBValue(out_color) < 128)
+				pixels->pixels[y][x] = RGB(255-2*GetBValue(out_color), 0, 255-2*GetRValue(out_color));
+			else
+				pixels->pixels[y][x] = RGB(GetRValue(out_color), 0, GetBValue(out_color));
+		}
+	}
+}
+
 void Visualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pixels *pixels)
 {
     switch (pattern)
@@ -1387,7 +1419,13 @@ void Visualizer::DrawPattern(VISUALIZER_PATTERN pattern, int bright, vis_pixels 
     case VISUALIZER_PATTERN_ANIM_SINUSOIDAL_CYCLE:
         DrawSinusoidalCycle(bright, bkgd_step, pixels);
         break;
-    }
+	case VISUALIZER_PATTERN_ANIM_WAVE:
+		DrawWave(bright, bkgd_step, pixels);
+		break;
+	case VISUALIZER_PATTERN_ANIM_CYCLE:
+		DrawCycle(bright, bkgd_step, 128, 64, pixels);
+		break;
+	}
 }
 
 void Visualizer::NetConnectThread()

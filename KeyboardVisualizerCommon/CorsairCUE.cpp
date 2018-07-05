@@ -7,8 +7,6 @@
 #include "CorsairCUE.h"
 #include "VisualizerDefines.h"
 
-#define CORSAIR_CUE_ENABLED
-
 static boolean failed;
 
 #ifdef CORSAIR_CUE_ENABLED
